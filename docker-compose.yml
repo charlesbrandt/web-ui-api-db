@@ -1,0 +1,130 @@
+version: "3"
+services:
+  web:
+    # https://hub.docker.com/_/nginx/
+    image: nginx:stable
+    container_name: boilerplate_web_1
+    # restart: always
+    volumes:
+      # - ./web/static:/srv/boilerplate/
+      - ./web/ssl:/etc/nginx/ssl
+      # - ./web/nginx.conf:/etc/nginx/nginx.conf
+      - ./web/default.conf:/etc/nginx/conf.d/default.conf
+      # mount any static / public content for efficient serving directly
+      # ./web/public;/srv/boilerplate/files/
+    working_dir: /srv/boilerplate/
+    ports:
+      # for development
+      - 127.0.0.1:8888:443
+      # leave off '127.0.0.1' if you want to expose the service beyond localhost
+      # (usefule when you want to access dev instance of boilerplate remotely
+      #  from e.g. a phone)
+      # - 8888:443
+      # for production
+      # - 80:80
+      # - 443:443
+    # if the container doesn't run, there may be a problem with the nginx.conf
+    # try running `docker-compose log web` for clues
+    # (usually SSL keys have not yet been generated in `web/ssl`)
+    # keep the container running to debug or run interactively with
+    #     docker-compose exec web bash
+    # entrypoint: ["tail", "-f", "/dev/null"]
+
+  ui:
+    # https://hub.docker.com/_/node/
+    # it's a good idea to fix the version number
+    # image: node:14
+    # but to keep things fresh
+    image: node:lts
+    container_name: boilerplate_ui_1
+    # restart: always
+    volumes:
+      - .:/srv/boilerplate/
+      - boilerplate_ui_modules:/srv/boilerplate/ui/node_modules
+    # ports:
+    #   - 127.0.0.1:3000:3000
+    working_dir: /srv/boilerplate/ui
+    command: sh -c "yarn && yarn run dev"
+    # entrypoint: ["tail", "-f", "/dev/null"]
+
+  api:
+    # image: node:lts
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: boilerplate_api_1
+    # restart: always
+    volumes:
+      - .:/srv/boilerplate/
+      - boilerplate_api_modules:/srv/boilerplate/api/node_modules
+    # ports:
+    #   - 127.0.0.1:3030:3030
+    working_dir: /srv/boilerplate/api
+    command: sh -c "yarn && yarn run dev"
+    # DEBUG=express:* node ./api/boilerplate.js
+    # entrypoint: ["tail", "-f", "/dev/null"]
+    # An example of chaining multiple commands for the container
+    # More complex customization is possible through a Dockerfile
+    # command: sh -c "
+    #   mkdir -p /srv/var/log
+    #   && node ./app.js
+    #   "
+
+  db:
+    # https://hub.docker.com/_/postgres/
+    image: postgres:latest
+    container_name: boilerplate_db_1
+    # restart: always
+    # ports:
+    # helpful for using a GUI client like compass for troubleshooting
+    # - 127.0.0.1:27017:27017
+    environment:
+      POSTGRES_PASSWORD: example
+    volumes:
+      - ./db:/data/db
+      # for importing database files
+      # - ./dump:/srv/dump
+
+  # test:
+  #   # Allows for running tests in a headless mode (choose one or the other)
+  #   image: cypress/included:7.4.0
+  #   container_name: boilerplate_test_1
+  #   # restart: always
+  #   depends_on:
+  #     - ui
+  #   environment:
+  #     # pass base url to test pointing at the web application
+  #     - CYPRESS_baseUrl=http://boilerplate_ui_1:3000
+  #   # share the current folder as volume to avoid copying
+  #   working_dir: /e2e
+  #   volumes:
+  #     - ./:/e2e
+
+  test:
+    # may need to run `xhost local:root` on the host
+    # so the container is allowed to connect to the local X server
+    # https://github.com/bahmutov/cypress-open-from-docker-compose
+    # https://www.cypress.io/blog/2019/05/02/run-cypress-with-a-single-docker-command/
+    image: cypress/included:7.6.0
+    container_name: boilerplate_test_1
+    # pass custom command to start Cypress otherwise it will use the entrypoint
+    # specified in the Cypress Docker image.
+    # also pass "--project <folder>" so that when Cypress opens
+    # it can find file "cypress.json" and show integration specs
+    # https://on.cypress.io/command-line#cypress-open
+    entrypoint: cypress open --project /e2e
+    environment:
+      - DISPLAY
+    working_dir: /e2e
+    volumes:
+      - ./:/e2e
+      # for Cypress to communicate with the X11 server pass this socket file
+      # in addition to any other mapped volumes
+      - /tmp/.X11-unix:/tmp/.X11-unix
+
+volumes:
+  boilerplate_ui_modules:
+    external: true
+
+  boilerplate_api_modules:
+    external: true

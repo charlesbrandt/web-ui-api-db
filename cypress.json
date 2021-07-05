@@ -1,0 +1,8 @@
+{
+  "supportFile": "tests/support/index.js",
+  "pluginsFile": "tests/plugins/index.js",
+  "fixturesFolder": "tests/fixtures",
+  "integrationFolder": "tests/integration",
+  "screenshotsFolder": "tests/screenshots",
+  "videosFolder": "tests/videos"
+}

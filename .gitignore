@@ -1,0 +1,29 @@
+.env
+*node_modules*
+
+# web/ssl*
+*nginx.crt
+*nginx.key
+*nginx.csr
+*.crt
+*.key
+*.csr
+
+ui/node_modules
+ui/.nuxt
+ui/static/sw.js
+ui/package-lock.json
+ui/yarn-lock.json
+ui/.env
+
+api/node_modules
+api/package-lock.json
+api/yarn-lock.json
+api/.env
+
+# db/* 
+db/*.wt
+
+cypress/
+tests/screenshots/
+tests/videos/
