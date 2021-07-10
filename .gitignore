@@ -8,6 +8,10 @@
 *.crt
 *.key
 *.csr
+*.ext
+*.pem
+*.srl
+*.p12
 
 ui/node_modules
 ui/.nuxt

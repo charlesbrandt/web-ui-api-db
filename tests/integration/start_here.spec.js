@@ -13,8 +13,14 @@ describe("My First Test", () => {
 
 describe("My Second Test", () => {
   it("Goes to the home page", () => {
-    cy.visit("https://localhost:8888");
+    // Note that cypress is running in docker,
+    // so all urls need to use the container names
+    cy.visit("http://boilerplate_web_1");
     // cy.visit("http://boilerplate_ui_1:3000");
-    cy.viewport(1000, 800);
+
+    // this would mean the webserver is running in the cypress container!
+    //cy.visit("https://localhost:8888");
+
+    cy.viewport(1000, 1000);
   });
 });

@@ -1,0 +1,9 @@
+{
+  "chromeWebSecurity": false,
+  "supportFile": "support/index.js",
+  "pluginsFile": "plugins/index.js",
+  "fixturesFolder": "fixtures",
+  "integrationFolder": "integration",
+  "screenshotsFolder": "screenshots",
+  "videosFolder": "videos"
+}

@@ -2,13 +2,16 @@
 
 a minimalist and flexible container boilerplate
 a file structure organization pattern
-a foundation for starting and configuring full-stack web applications
-a meta template architecture
+a foundation to configure a full-stack web-app
+a meta framework to use for an application architecture template
+a blank slate, a fresh start
 focused on devx with a clear path toward production
 
 for an opinionated version that is ready to go, check:
 
 https://gitlab.com/charlesbrandt/fern-seed
+
+https://opensource.guide/starting-a-project/
 
 ## Containers
 
@@ -56,23 +59,32 @@ git fetch upstream
 git merge upstream/main
 ```
 
-## Conventions
+## Conventions / Patterns
 
 use the word 'boilerplate' for project level naming
-dashes ok, low lines ok, _no spaces_, ideally no capitalization
+dashes usually ok, low lines usually ok, _no spaces_, ideally no capitalization
 
 use the string 'web-ui-api-db' for printable name
-anything goes here, including spaces and capitalization, as long as it's a permanent string (does not change over time... a change in one place changes everywhere. valid ID)
+anything goes here, including spaces and capitalization, as long as it's a permanent string. This string should not change over time. If it does change in one place it should be changed everywhere.
 
-use the link
+https://localhost:8888
+should be used for the public address of the application
+
 https://gitlab.com/charlesbrandt/web-ui-api-db
-to find and replace for the project's URL
+the project's repository URL
+
+https://gitlab.com/charlesbrandt/web-ui-api-db/-/issues
+the project's issues URL
+
+TODO:admins@web-ui-api-db.email
+Point of contact:
+
+charlesbrandt
+Copyright and username references (do this last to avoid messing up links)
 
 ### Find / Replace
 
-Should only need to do this the first time you set up a new project. After that, updates will happen on merge upstream.
-
-ind and replace all instances of `boilerplate` with `project_name`. (Manually or with a script)
+Find and replace all instances of `boilerplate` with `project_name`. I like to use VS Code to find and replace across all files and see what is being matched. You could also use a command like the following. Be careful if any of the strings appear in your .git directory.
 
     find * -type f -exec sed -i 's/boilerplate/project_name/g' {} +
 
@@ -80,18 +92,14 @@ ind and replace all instances of `boilerplate` with `project_name`. (Manually or
 
 [via](https://unix.stackexchange.com/questions/112023/how-can-i-replace-a-string-in-a-files/112024#112024)
 
-Look for other instances of the website address and public project name (via case insensitive search)
-
-Web-UI-API-DB
-
-Update as appropriate.
+Look for other instances of the website address and public project name (see above list)
 
 git add .
 git commit -m "update project name and references"
 
 ## Next Steps
 
-[Infrastructure configuration (Dev-Ops)](docker-README.md)
+[Infrastructure configuration (Dev-Ops)](README-docker.md)
 
     git mv README.md README-web-ui-api-db.md
 
